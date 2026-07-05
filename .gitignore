@@ -1,0 +1,20 @@
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+### Maven Build ###
+target/
+*.jar
+*.war
+*.ear
+
+### Gradle Build ###
+build/
+.gradle/
+
+### OS files ###
+.DS_Store
+Thumbs.db
