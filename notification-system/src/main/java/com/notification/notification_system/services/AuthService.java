@@ -24,6 +24,7 @@ public class AuthService {
     }
 
     public String login(AuthRequest request) {
+        // Unwraps the Optional<User> returned by findByEmail safely
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

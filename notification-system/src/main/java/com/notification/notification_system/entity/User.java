@@ -1,4 +1,4 @@
-package com.notification.notification_system.Entity;
+package com.notification.notification_system.entity;
 
 
 import jakarta.persistence.*;

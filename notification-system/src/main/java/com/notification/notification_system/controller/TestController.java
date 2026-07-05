@@ -1,4 +1,4 @@
-package com.notification.notification_system.Controller;
+package com.notification.notification_system.controller;
 
 
 

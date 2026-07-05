@@ -1,10 +1,9 @@
-package com.notification.notification_system.Security;
+package com.notification.notification_system.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -17,17 +16,12 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // allow login & register
-                        .anyRequest().authenticated() // secure other APIs
+                        .requestMatchers("/auth/**").permitAll() // ✅ allow auth APIs
+                        .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.disable()); // disable default login UI
+                .formLogin(form -> form.disable())
+                .httpBasic(httpBasic -> httpBasic.disable());
 
         return http.build();
-    }
-
-    // ✅ REQUIRED for password hashing
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
