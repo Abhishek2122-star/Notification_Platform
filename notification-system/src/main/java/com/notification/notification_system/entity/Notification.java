@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Entity
-@Data // ✅ THIS WILL AUTO-GENERATE GETTERS & SETTERS
+@Data
 public class Notification {
 
     @Id
@@ -16,6 +16,8 @@ public class Notification {
     private String message;
 
     private String email;
+
+    private boolean isRead = false; // ✅ NEW FIELD
 
     private Date createdAt;
 }

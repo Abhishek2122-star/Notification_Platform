@@ -14,18 +14,37 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
+    // ✅ Send Notification
     public String sendNotification(String email, String message) {
         Notification notification = new Notification();
-        notification.setEmail(email);
-        notification.setMessage(message);
+        notification.setEmail(email.trim());
+        notification.setMessage(message.trim());
         notification.setCreatedAt(new Date());
+        notification.setRead(false);
 
-        notificationRepository.save(notification); // 🔥 THIS IS IMPORTANT
+        notificationRepository.save(notification);
 
         return "Notification Sent!";
     }
 
+    // ✅ Get all (sorted)
     public List<Notification> getUserNotifications(String email) {
-        return notificationRepository.findByEmail(email);
+        return notificationRepository.findByEmailOrderByCreatedAtDesc(email.trim());
+    }
+
+    // ✅ Get unread only
+    public List<Notification> getUnreadNotifications(String email) {
+        return notificationRepository.findByEmailAndIsReadFalse(email.trim());
+    }
+
+    // ✅ Mark as read
+    public String markAsRead(Long id) {
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notification not found"));
+
+        notification.setRead(true);
+        notificationRepository.save(notification);
+
+        return "Marked as read";
     }
 }

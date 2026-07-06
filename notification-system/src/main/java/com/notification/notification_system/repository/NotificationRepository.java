@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    List<Notification> findByEmail(String email);
+    List<Notification> findByEmailOrderByCreatedAtDesc(String email);
+
+    List<Notification> findByEmailAndIsReadFalse(String email);
 }

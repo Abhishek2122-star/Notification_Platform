@@ -13,21 +13,37 @@ public class JwtUtil {
     private final String SECRET = "mysecretkeymysecretkeymysecretkey12"; // min 32 chars
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
+    // ✅ Generate Token
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
+    // ✅ Extract Email
     public String extractEmail(String token) {
+        return getClaims(token).getSubject();
+    }
+
+    // ✅ Validate Token
+    public boolean validateToken(String token) {
+        try {
+            getClaims(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    // ✅ Common method
+    private Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .getBody();
     }
 }
