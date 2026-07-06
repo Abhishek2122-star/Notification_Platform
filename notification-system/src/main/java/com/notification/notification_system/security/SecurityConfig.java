@@ -16,7 +16,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // ✅ allow auth APIs
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/notifications/**").permitAll() // MUST include this
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form.disable())
