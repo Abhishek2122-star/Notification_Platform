@@ -13,10 +13,12 @@ import java.util.List;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final EmailService emailService; // ✅ NEW
 
-    // ✅ Send Notification
+    // ✅ Send Notification + Email
     public String sendNotification(String email, String message) {
         Notification notification = new Notification();
+
         notification.setEmail(email.trim());
         notification.setMessage(message.trim());
         notification.setCreatedAt(new Date());
@@ -24,15 +26,18 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
-        return "Notification Sent!";
+        // ✅ SEND EMAIL HERE
+        emailService.sendEmail(email, message);
+
+        return "Notification Sent + Email Delivered!";
     }
 
-    // ✅ Get all (sorted)
+    // ✅ Get all notifications
     public List<Notification> getUserNotifications(String email) {
         return notificationRepository.findByEmailOrderByCreatedAtDesc(email.trim());
     }
 
-    // ✅ Get unread only
+    // ✅ Get unread
     public List<Notification> getUnreadNotifications(String email) {
         return notificationRepository.findByEmailAndIsReadFalse(email.trim());
     }
