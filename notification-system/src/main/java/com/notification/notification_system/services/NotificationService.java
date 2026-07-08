@@ -26,8 +26,8 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
-        // ✅ SEND TO KAFKA INSTEAD OF EMAIL DIRECTLY
-        kafkaProducerService.sendNotification(STR."\{email}|\{message}");
+        // ✅ FIXED: Removed STR."..."
+        kafkaProducerService.sendNotification(email + "|" + message);
 
         return "Notification Sent (Async via Kafka)";
     }

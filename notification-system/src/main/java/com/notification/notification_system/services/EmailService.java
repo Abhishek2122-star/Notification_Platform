@@ -21,10 +21,10 @@ public class EmailService {
 
             mailSender.send(mail);
 
-            System.out.println(STR."✅ Email sent successfully to \{toEmail}");
+            System.out.println("✅ Email sent successfully to " + toEmail);
 
         } catch (Exception e) {
-            System.out.println(STR."❌ Email failed: \{e.getMessage()}");
+            System.out.println("❌ Email failed: " + e.getMessage());
             throw new RuntimeException("Email sending failed");
         }
     }
