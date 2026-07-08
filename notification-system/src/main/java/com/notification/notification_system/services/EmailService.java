@@ -13,11 +13,19 @@ public class EmailService {
 
     public void sendEmail(String toEmail, String message) {
 
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(toEmail);
-        mail.setSubject("New Notification 🔔");
-        mail.setText(message);
+        try {
+            SimpleMailMessage mail = new SimpleMailMessage();
+            mail.setTo(toEmail);
+            mail.setSubject("New Notification 🔔");
+            mail.setText(message);
 
-        mailSender.send(mail);
+            mailSender.send(mail);
+
+            System.out.println(STR."✅ Email sent successfully to \{toEmail}");
+
+        } catch (Exception e) {
+            System.out.println(STR."❌ Email failed: \{e.getMessage()}");
+            throw new RuntimeException("Email sending failed");
+        }
     }
 }

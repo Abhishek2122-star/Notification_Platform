@@ -1,6 +1,7 @@
 package com.notification.notification_system.services;
 
 import com.notification.notification_system.entity.Notification;
+import com.notification.notification_system.kafka.KafkaProducerService;
 import com.notification.notification_system.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,11 @@ import java.util.List;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final EmailService emailService; // ✅ NEW
+    private final KafkaProducerService kafkaProducerService;
 
-    // ✅ Send Notification + Email
     public String sendNotification(String email, String message) {
-        Notification notification = new Notification();
 
+        Notification notification = new Notification();
         notification.setEmail(email.trim());
         notification.setMessage(message.trim());
         notification.setCreatedAt(new Date());
@@ -26,23 +26,20 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
-        // ✅ SEND EMAIL HERE
-        emailService.sendEmail(email, message);
+        // ✅ SEND TO KAFKA INSTEAD OF EMAIL DIRECTLY
+        kafkaProducerService.sendNotification(STR."\{email}|\{message}");
 
-        return "Notification Sent + Email Delivered!";
+        return "Notification Sent (Async via Kafka)";
     }
 
-    // ✅ Get all notifications
     public List<Notification> getUserNotifications(String email) {
         return notificationRepository.findByEmailOrderByCreatedAtDesc(email.trim());
     }
 
-    // ✅ Get unread
     public List<Notification> getUnreadNotifications(String email) {
         return notificationRepository.findByEmailAndIsReadFalse(email.trim());
     }
 
-    // ✅ Mark as read
     public String markAsRead(Long id) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Notification not found"));
