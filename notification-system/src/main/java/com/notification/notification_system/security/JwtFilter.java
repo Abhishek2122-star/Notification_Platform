@@ -26,6 +26,17 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        // ✅ SKIP these endpoints
+        if (path.startsWith("/auth") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 🔍 Get Authorization header
         String authHeader = request.getHeader("Authorization");
 
@@ -58,7 +69,6 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        // ✅ Continue request
         filterChain.doFilter(request, response);
     }
 }

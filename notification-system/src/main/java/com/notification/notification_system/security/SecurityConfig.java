@@ -18,14 +18,26 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // ✅ only auth is public
-                        .anyRequest().authenticated()           // 🔒 everything else protected
+                        // ✅ Swagger PUBLIC
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+
+                        // ✅ Auth PUBLIC
+                        .requestMatchers("/auth/**").permitAll()
+
+                        // 🔒 Everything else secured
+                        .anyRequest().authenticated()
                 )
+
                 .formLogin(form -> form.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
 
-                // ✅ ADD JWT FILTER HERE
+                // ✅ JWT FILTER
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
